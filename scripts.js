@@ -6,23 +6,57 @@ const doc = document.querySelector.bind(document);
         links: [...doc('.stepBar').children],
         content: [...doc('.formArea').children],
         final: doc('.final'),
-        openStep: doc("[data-open]"),//pega a 1 página para manter aberta.
+        openStep: doc("[data-open]"),//pega a primeira página para manter aberta.
         btn: [...doc('.btn').children],
         btns: [...doc('.btns').children]
     }
 
     //valida o CPF difitado
-    function validateCPF(){
-        const cpf = doc('#cpf').value
-        let regex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/
-        try{
-            if(!regex.test(cpf) || cpf === '')
-                throw new Error()
-        }catch(Error){
-            alert("CPF inválido, digite novamente")
-            return;
+    function isCPF() {
+        cpf = doc('#cpf')
+        cpf = cpf.toString().replace(/[^\d]+/g,'');
+        let soma = 0;
+        const dig1= 0, dig2= 0;
+        for(var i = 0; i < 10; i++){
+            for(var j = 10; 10 >= 2; j--){
+                soma += cpf[i] * j;
+            }
         }
-        validateDate()
+        console.log(soma)
+        soma = soma % 11;
+        console.log(soma);
+        if (soma < 2) 
+            dig1 = 0;
+        else{
+            dig1 = 11 - soma;
+        }
+        console.log("Primeiro digito : " + dig1);
+        if (cpf[9] != dig1){
+            alert('CPF inválido')
+            return false;
+        }
+    
+        for(var i = 0; i < 10; i++){
+            for(var j = 11; j >=2; j--){
+                soma += cpf[i] * j;
+            }
+        }
+        console.log(soma)
+        soma = soma % 11;
+        console.log(soma)
+        if (soma > 0) 
+            dig2 = 0;
+        else{
+            dig2 = 11 - soma;
+        }
+
+        if (cpf[10] != dig2){
+            alert('CPF inválido')
+            return false;
+        }   
+        else
+            console.log("Segundo digito : " + soma);
+            return true;
     }
 
     //valida a data de nascimento
@@ -30,10 +64,7 @@ const doc = document.querySelector.bind(document);
         const dtNasc = doc('#dtNasc').value
         if(dtNasc == ''){
             alert('Insira a data de nascimento')
-            return
         }
-        showCurrentStep('adress')
-        show()
     }
 
     //esconde todas as abas
@@ -60,13 +91,22 @@ const doc = document.querySelector.bind(document);
         
         //ativa a rolagem na barra atual
         id.className +="active";
+    
+        if(id == 'adress'){
+            isCPF()
+            validateDate()
+        }
+        if(id == 'final'){
+            consultCEP()
+            show()
+        }
     }
 
     //recebe um evento para pegar o id onde está ocorrendo
     function selectStep(event){
         removeAllActiveStep()
 
-        const select = event.currentTarget
+        const select = event.target
         showCurrentStep(select.dataset.id)
         
         //ativa apenas a aba atual
@@ -114,7 +154,7 @@ const doc = document.querySelector.bind(document);
         let name = doc('#nome').value
         let dtNasc = doc('#dtNasc').value
         let cpf = doc('#cpf').value
-        html.final.innerHTML += `<p><br>Nome: ${name}<\p><br>
+        html.final.innerHTML = `<p><br>Nome: ${name}<\p><br>
                                 <p>Data de Nascimento: ${dtNasc}<\P><br>
                                 <p>CPF: ${cpf}<\P><br>`
     }
@@ -132,5 +172,6 @@ const doc = document.querySelector.bind(document);
         //clica na primeira aba para manter aberta enquanto nenhum evento ocorrer.
         html.openStep.click()
     }
+
 
 start()

@@ -77,9 +77,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     font-size: 15px;
 }
 
-#btnNext{
-    margin-left: 95px;
-}
 form button{
     height: 35px;
     width: 100px;
