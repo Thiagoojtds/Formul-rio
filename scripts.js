@@ -11,53 +11,45 @@ const doc = document.querySelector.bind(document);
         btns: [...doc('.btns').children]
     }
 
-    //valida o CPF difitado
-    function isCPF() {
-        cpf = doc('#cpf')
-        cpf = cpf.toString().replace(/[^\d]+/g,'');
-        let soma = 0;
-        const dig1= 0, dig2= 0;
-        for(var i = 0; i < 10; i++){
-            for(var j = 10; 10 >= 2; j--){
-                soma += cpf[i] * j;
-            }
-        }
-        console.log(soma)
-        soma = soma % 11;
-        console.log(soma);
-        if (soma < 2) 
-            dig1 = 0;
-        else{
-            dig1 = 11 - soma;
-        }
-        console.log("Primeiro digito : " + dig1);
-        if (cpf[9] != dig1){
-            alert('CPF inválido')
-            return false;
-        }
-    
-        for(var i = 0; i < 10; i++){
-            for(var j = 11; j >=2; j--){
-                soma += cpf[i] * j;
-            }
-        }
-        console.log(soma)
-        soma = soma % 11;
-        console.log(soma)
-        if (soma > 0) 
-            dig2 = 0;
-        else{
-            dig2 = 11 - soma;
-        }
-
-        if (cpf[10] != dig2){
-            alert('CPF inválido')
-            return false;
-        }   
-        else
-            console.log("Segundo digito : " + soma);
-            return true;
+    //valida o CPF
+    function isCPF() {	
+        cpf = doc('#cpf').value
+        cpf = cpf.replace(/[^\d]+/g,'');
+        if(cpf == '') return false;	
+        // Elimina CPFs invalidos conhecidos	
+        if (cpf.length != 11 || 
+            cpf == "00000000000" || 
+            cpf == "11111111111" || 
+            cpf == "22222222222" || 
+            cpf == "33333333333" || 
+            cpf == "44444444444" || 
+            cpf == "55555555555" || 
+            cpf == "66666666666" || 
+            cpf == "77777777777" || 
+            cpf == "88888888888" || 
+            cpf == "99999999999")
+                return false;		
+        // Valida 1o digito	
+        count = 0;	
+        for (i=0; i < 9; i ++)		
+            count += parseInt(cpf.charAt(i)) * (10 - i);	
+            dig = 11 - (count % 11);	
+            if (dig == 10 || dig == 11)		
+                dig = 0;	
+            if (dig != parseInt(cpf.charAt(9)))		
+                return false;		
+        // Valida 2o digito	
+        count = 0;	
+        for (i = 0; i < 10; i ++)		
+            count += parseInt(cpf.charAt(i)) * (11 - i);	
+        dig = 11 - (count % 11);	
+        if (dig == 10 || dig == 11)	
+            dig = 0;	
+        if (dig != parseInt(cpf.charAt(10)))
+            return false;		
+        return true;   
     }
+
 
     //valida a data de nascimento
     function validateDate(){
@@ -93,8 +85,8 @@ const doc = document.querySelector.bind(document);
         id.className +="active";
     
         if(id == 'adress'){
-            isCPF()
             validateDate()
+            isCPF() ? html.final.innerHTML += `CPF: ${doc('#cpf').value}` : alert('CPF inválido')
         }
         if(id == 'final'){
             consultCEP()
@@ -175,3 +167,6 @@ const doc = document.querySelector.bind(document);
 
 
 start()
+
+
+
