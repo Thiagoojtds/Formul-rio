@@ -18,11 +18,11 @@
         <div class="formArea">
             <section class="form-1" id="data">
                 <form method="post" name="forms">
-                    Nome* <br><input type="text" id="nome"><br>
-                    Data de Nascimento*<br> <input type="date" id="dtNasc" placeholder="00/00/000" min= "0000-00-00"max="2022-05-19"><br>
-                    CPF*<br> <input type="text" id="cpf" placeholder="000.000.000-00">
+                    Nome* <br><input type="text" id="nome" required><br>
+                    Data de Nascimento*<br> <input type="date" id="dtNasc" placeholder="YYYY-MM-DD" min= "0000-00-00"max="2022-05-19" ><br>
+                    CPF*<br> <input type="text" id="cpf" placeholder="000.000.000-00" >
                     <div class="btn"> 
-                        <button type="button" data-id="adress" onclick="showCurrentStep('adress')">Next ></button>
+                        <button type="submit" data-id="adress" onclick="showCurrentStep('adress')">Next ></button>
                     </div>
                 </form>
             </section>
@@ -30,12 +30,12 @@
             <section class="form-2" id="adress">
                 <form method="get" name="forms-2">
                     <br><label><input type="text" id="cep" placeholder="Digite seu CEP" onchange="consultCEP()"></label><br><br>
-                    Logradouro*<br> <input type="text" id="rua"><br>
-                    Bairro*<br> <input type="text" id="bairro"><br>
-                    Cidade*<br> <input type="text" id="city">
+                    Logradouro*<br> <input type="text" id="rua" ><br>
+                    Bairro*<br> <input type="text" id="bairro" ><br>
+                    Cidade*<br> <input type="text" id="city" >
                     <div class="btns"> 
-                        <button type="button" data-id="data" > Back</button>
-                        <button type="button" data-id="final" >Submit > </button>
+                        <button type="submit" data-id="data" > Back</button>
+                        <button type="submit" data-id="final" >Submit > </button>
                     </div>
                 </form>
             </section>

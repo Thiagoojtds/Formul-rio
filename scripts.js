@@ -17,18 +17,7 @@ const doc = document.querySelector.bind(document);
         cpf = cpf.replace(/[^\d]+/g,'');
         if(cpf == '') return false;	
         // Elimina CPFs invalidos conhecidos	
-        if (cpf.length != 11 || 
-            cpf == "00000000000" || 
-            cpf == "11111111111" || 
-            cpf == "22222222222" || 
-            cpf == "33333333333" || 
-            cpf == "44444444444" || 
-            cpf == "55555555555" || 
-            cpf == "66666666666" || 
-            cpf == "77777777777" || 
-            cpf == "88888888888" || 
-            cpf == "99999999999")
-                return false;		
+        if (cpf.length != 11)return false;	
         // Valida 1o digito	
         count = 0;	
         for (i=0; i < 9; i ++)		
@@ -47,16 +36,25 @@ const doc = document.querySelector.bind(document);
             dig = 0;	
         if (dig != parseInt(cpf.charAt(10)))
             return false;		
-        return true;   
+        return true; 
     }
 
+    function validaName(){
+        nome = doc('#nome').value
+        if(nome == ''){
+            alert('Insira seu nome')
+
+        }
+        localStorage.setItem('nome', nome)
+    }
 
     //valida a data de nascimento
     function validateDate(){
         const dtNasc = doc('#dtNasc').value
         if(dtNasc == ''){
-            alert('Insira a data de nascimento')
+            alert('Digite sua data de nascimento')
         }
+        localStorage.setItem('dtNasc', dtNasc)
     }
 
     //esconde todas as abas
@@ -85,8 +83,13 @@ const doc = document.querySelector.bind(document);
         id.className +="active";
     
         if(id == 'adress'){
+            validaName()
             validateDate()
-            isCPF() ? html.final.innerHTML += `CPF: ${doc('#cpf').value}` : alert('CPF inválido')
+            if(isCPF()){
+                sessionStorage.setItem('cpf', cpf)
+            } 
+            alert('CPF inválido');
+
         }
         if(id == 'final'){
             consultCEP()
@@ -131,6 +134,9 @@ const doc = document.querySelector.bind(document);
             $("#rua").val(data.logradouro);
             $("#bairro").val(data.bairro);
             $("#city").val(data.localidade);
+            localStorage.setItem('rua', data.logradouro)
+            localStorage.setItem('bairro', data.bairro)
+            localStorage.setItem('cidade', data.localidade)
 
             //converte o JSON para objeto
             fetch(url).then(function(response){
@@ -143,24 +149,22 @@ const doc = document.querySelector.bind(document);
 
     //mostra o resultado dos dados inseridos na primeira aba.
     function show(){
-        let name = doc('#nome').value
-        let dtNasc = doc('#dtNasc').value
-        let cpf = doc('#cpf').value
-        html.final.innerHTML = `<p><br>Nome: ${name}<\p><br>
-                                <p>Data de Nascimento: ${dtNasc}<\P><br>
-                                <p>CPF: ${cpf}<\P><br>`
+        html.final.innerHTML = `<p><br>Nome: ${localStorage.getItem('nome', nome)}<\p><br>
+                                <p>Data de Nascimento: ${localStorage.getItem('dtNasc', dtNasc)}<\P><br>
+                                <p>CPF: ${localStorage.getItem('cpf', cpf)}<\p>`
     }
     //mostra o resultado com base no objeto JSON da API.
     function showResult(data){
-        html.final.innerHTML += `<br><p>${data.logradouro}<\p><br>
-                                <p>Bairro: ${data.bairro}<\p><br>
-                                <p>Cidade: ${data.localidade}<\p>`
+        html.final.innerHTML += `<br><p>${localStorage.getItem('rua', data.logradouro)}<\p><br>
+                                <p>Bairro: ${localStorage.getItem('bairro', data.bairro)}<\p><br>
+                                <p>Cidade: ${localStorage.getItem('cidade', data.localidade)}<\p>`
     }
     
     //reune todos as funções para startar o código.
     function start(){
         hideAllStepContent()
         listenForChanges()
+        localStorage.clear()
         //clica na primeira aba para manter aberta enquanto nenhum evento ocorrer.
         html.openStep.click()
     }
