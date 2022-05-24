@@ -43,9 +43,16 @@ const doc = document.querySelector.bind(document);
         nome = doc('#nome').value
         if(nome == ''){
             alert('Insira seu nome')
-
+            nome.focus()
         }
         localStorage.setItem('nome', nome)
+        validateDate()
+        if(isCPF() == true){
+            localStorage.setItem('cpf', cpf)
+            showCurrentStep('adress')
+        }else
+        alert('CPF inválido');
+        cpf.focus()
     }
 
     //valida a data de nascimento
@@ -53,6 +60,7 @@ const doc = document.querySelector.bind(document);
         const dtNasc = doc('#dtNasc').value
         if(dtNasc == ''){
             alert('Digite sua data de nascimento')
+            dtNasc.focus()
         }
         localStorage.setItem('dtNasc', dtNasc)
     }
@@ -82,15 +90,6 @@ const doc = document.querySelector.bind(document);
         //ativa a rolagem na barra atual
         id.className +="active";
     
-        if(id == 'adress'){
-            validaName()
-            validateDate()
-            if(isCPF()){
-                sessionStorage.setItem('cpf', cpf)
-            } 
-            alert('CPF inválido');
-
-        }
         if(id == 'final'){
             consultCEP()
             show()
@@ -124,8 +123,7 @@ const doc = document.querySelector.bind(document);
         const cep = doc("#cep").value;
         //valida o cep
         if(cep.length != 8 || cep === ""){
-            alert('CEP inválido')
-            return;
+            console.log('CEP inválido')
         }else
 
         //pega o json recebido pela API viacep e altera os valores do input
