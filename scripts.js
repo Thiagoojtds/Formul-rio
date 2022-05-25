@@ -92,6 +92,9 @@ const doc = document.querySelector.bind(document);
     
         if(id == 'final'){
             consultCEP()
+            localStorage.setItem('rua', doc('#rua').value)
+            localStorage.setItem('bairro', doc('#bairro').value)
+            localStorage.setItem('cidade', doc('#city').value)
             show()
         }
     }
@@ -132,9 +135,6 @@ const doc = document.querySelector.bind(document);
             $("#rua").val(data.logradouro);
             $("#bairro").val(data.bairro);
             $("#city").val(data.localidade);
-            localStorage.setItem('rua', data.logradouro)
-            localStorage.setItem('bairro', data.bairro)
-            localStorage.setItem('cidade', data.localidade)
 
             //converte o JSON para objeto
             fetch(url).then(function(response){
